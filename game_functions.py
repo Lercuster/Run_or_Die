@@ -35,7 +35,20 @@ def check_keyup_event(event, player):
         player.move_down = False
 
 
-def check_event(player):
+def check_drawing_button(drawing_button, mouse_x, mouse_y):
+    """ """
+    butt_clicked = drawing_button.rect.collidepoint(mouse_x, mouse_y)
+    if butt_clicked:
+        print("drawing button is clicked")
+
+
+def check_play_button(play_button, mouse_x, mouse_y):
+    butt_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if butt_clicked:
+        print('play button is clicked')
+
+
+def check_event(player, drawing_button, play_button):
     """
     Function which is calling check keydown/keyup.
     Checks events in general and deal with them.
@@ -47,14 +60,20 @@ def check_event(player):
             check_keydown_event(event, player)
         elif event.type == pygame.KEYUP:
             check_keyup_event(event, player)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_drawing_button(drawing_button, mouse_x, mouse_y)
+            check_play_button(play_button, mouse_x, mouse_y)
 
 
-def update_screen(settings, screen, player):
+def update_screen(settings, screen, player, drawing_button, play_button):
     """
     Updating screen.
     """
     screen.fill(settings.background_color)
     player.blitme()
+    drawing_button.draw_button()
+    play_button.draw_button()
     pygame.display.flip()
 
 
