@@ -10,13 +10,11 @@ def check_keydown_event(event, player):
     check button pressed events. if button is pushed, flag a player to move
     """
     if event.key == pygame.K_RIGHT:
-        player.move_right = True
+        player.steering_vector = player.get_orto_vector('r')
     if event.key == pygame.K_LEFT:
-        player.move_left = True
+        player.steering_vector = player.get_orto_vector('l')
     if event.key == pygame.K_UP:
-        player.move_up = True
-    if event.key == pygame.K_DOWN:
-        player.move_down = True
+        player.moving = True
     elif event.key == pygame.K_q:
         sys.exit()
 
@@ -25,24 +23,19 @@ def check_keyup_event(event, player):
     """
     analog to keydown, but with keyup events
     """
-    if event.key == pygame.K_RIGHT:
-        player.move_right = False
-    if event.key == pygame.K_LEFT:
-        player.move_left = False
     if event.key == pygame.K_UP:
-        player.move_up = False
-    if event.key == pygame.K_DOWN:
-        player.move_down = False
+        player.moving = False
 
 
 def check_drawing_button(drawing_button, mouse_x, mouse_y):
-    """ """
+    """ check is drawing button is clicked """
     butt_clicked = drawing_button.rect.collidepoint(mouse_x, mouse_y)
     if butt_clicked:
         print("drawing button is clicked")
 
 
 def check_play_button(play_button, mouse_x, mouse_y):
+    """ check is play button is clicked """
     butt_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if butt_clicked:
         print('play button is clicked')
