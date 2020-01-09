@@ -28,7 +28,7 @@ class Player():
     def update(self):
         """ move player """
         if self.moving:
-            self.direction_vector = self.direction_vector + self.steering_vector * 1
+            self.direction_vector = self.direction_vector + self.steering_vector
             self.normalize_direction_vector()
             self.center -= self.direction_vector[0]
             self.bottom -= self.direction_vector[1]
@@ -40,6 +40,7 @@ class Player():
                 self.reset_to_initial_pos()
         self.rect.centerx = self.center
         self.rect.bottom = self.bottom
+        print(self.direction_vector)
 
     def reset_to_initial_pos(self):
         self.center = self.screen_rect.centerx
@@ -54,7 +55,7 @@ class Player():
             return np.array([self.direction_vector[1], -self.direction_vector[0]])
 
     def normalize_direction_vector(self):
-        self.direction_vector = self.direction_vector / (self.direction_vector[0] ** 2 + self.direction_vector[1] ** 2) ** 1/2
+        self.direction_vector = self.direction_vector / np.linalg.norm(self.direction_vector)
 
     def blitme(self):
         """ draw player """
