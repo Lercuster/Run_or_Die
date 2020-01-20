@@ -4,6 +4,7 @@ from global_settings import Settings
 from time import sleep
 from random import randint
 from block import Block
+from grid import Grid
 
 
 def draw_grid(settings, screen):
@@ -60,7 +61,7 @@ def check_play_button(play_button, mouse_x, mouse_y):
         print('play button is clicked')
 
 
-def check_event(settings, screen, player, drawing_button, play_button, stats, blocks):
+def check_event(settings, screen, player, drawing_button, play_button, stats, blocks, grid):
     """
     Function which is calling check keydown/keyup.
     Checks events in general and deal with them.
@@ -76,9 +77,16 @@ def check_event(settings, screen, player, drawing_button, play_button, stats, bl
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_drawing_button(drawing_button, mouse_x, mouse_y)
             check_play_button(play_button, mouse_x, mouse_y)
-            stats.drawing_mode = pygame.mouse.get_pressed()
-            if stats.drawing_mode[0]:
-                create_grid_block(settings, screen, mouse_x, mouse_y, blocks)
+            grid.mouse_press = pygame.mouse.get_pressed()[0]
+            grid.mouse_x = mouse_x
+            grid.mouse_y = mouse_y
+            #stats.drawing_mode = pygame.mouse.get_pressed()
+            #if stats.drawing_mode[0]:
+            #    create_grid_block(settings, screen, mouse_x, mouse_y, blocks)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            #stats.drawing_mode = pygame.mouse.get_pressed()
+            grid.mouse_press = pygame.mouse.get_pressed()[0]
+
 
 
 def get_correct_block_position(settings, posx, posy):
@@ -97,17 +105,18 @@ def create_grid_block(settings, screen, posx, posy, blocks):
             blocks.add(block)
 
 
-def update_screen(settings, screen, player, drawing_button, play_button, blocks):
+def update_screen(settings, screen, player, drawing_button, play_button, blocks, grid):
     """
     Updating screen.
     """
     screen.fill(settings.background_color)
     draw_grid(settings, screen)
-    player.blitme()
     drawing_button.draw_button()
+    #for block in blocks:
+    #    block.draw_block()
+    grid.draw_all_blocks()
     play_button.draw_button()
-    for block in blocks:
-        block.draw_block()
+    player.blitme()
     pygame.display.flip()
 
 

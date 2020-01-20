@@ -19,7 +19,7 @@ class Settings():
         self.grid_color = (50, 50, 50)
         self.player_color = (255, 0, 0)
         self.player_radius = 10
-        self.player_speed = 0.1
+        self.player_speed = 1
         self.initialize_dynamic_settings()
 
         # block settings #

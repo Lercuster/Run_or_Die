@@ -7,6 +7,7 @@ from button import Button
 from block import Block
 from stats import Stats
 from pygame.sprite import Group
+from grid import Grid
 
 
 def run_game():
@@ -18,12 +19,14 @@ def run_game():
     drawing_button = Button(screen, 'Drawing', (1100, 50))
     play_button = Button(screen, 'Play', (1100, 100))
     blocks = Group()
+    grid = Grid(settings, screen, blocks, stats)
     pygame.display.set_caption('run or die')
 
     while True:
-        gf.check_event(settings, screen, player, drawing_button, play_button, stats, blocks)
+        gf.check_event(settings, screen, player, drawing_button, play_button, stats, blocks, grid)
         player.update()
-        gf.update_screen(settings, screen, player, drawing_button, play_button, blocks)
+        grid.update()
+        gf.update_screen(settings, screen, player, drawing_button, play_button, blocks, grid)
 
 
 run_game()
