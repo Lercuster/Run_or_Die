@@ -25,6 +25,10 @@ class Settings():
         # block settings #
         self.block_color = (200, 200, 200)
 
+        # status
+        self.drawing_mode = False
+        self.playing_mode = False
+
 
     def initialize_dynamic_settings(self):
         pass

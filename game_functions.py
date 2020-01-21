@@ -47,18 +47,32 @@ def check_keyup_event(event, player):
         player.moving = False
 
 
-def check_drawing_button(drawing_button, mouse_x, mouse_y):
+def check_drawing_button(settings, drawing_button, mouse_x, mouse_y):
     """ check is drawing button is clicked """
     butt_clicked = drawing_button.rect.collidepoint(mouse_x, mouse_y)
     if butt_clicked:
-        print("drawing button is clicked")
+        if not settings.drawing_mode:
+            settings.drawing_mode = True
+            drawing_button.change_color()
+            print("drawing button is clicked")
+        else:
+            settings.drawing_mode = False
+            drawing_button.change_color()
+            print("drawing button is unclicked")
 
 
-def check_play_button(play_button, mouse_x, mouse_y):
+def check_play_button(settings, play_button, mouse_x, mouse_y):
     """ check is play button is clicked """
     butt_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if butt_clicked:
-        print('play button is clicked')
+        if not settings.playing_mode:
+            settings.playing_mode = True
+            play_button.change_color()
+            print("playing button is clicked")
+        else:
+            settings.playing_mode = False
+            play_button.change_color()
+            print("playing button is unclicked")
 
 
 def check_event(settings, screen, player, drawing_button, play_button, stats, blocks, grid):
@@ -75,11 +89,12 @@ def check_event(settings, screen, player, drawing_button, play_button, stats, bl
             check_keyup_event(event, player)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_drawing_button(drawing_button, mouse_x, mouse_y)
-            check_play_button(play_button, mouse_x, mouse_y)
-            grid.mouse_press = pygame.mouse.get_pressed()[0]
-            grid.mouse_x = mouse_x
-            grid.mouse_y = mouse_y
+            check_drawing_button(settings, drawing_button, mouse_x, mouse_y)
+            check_play_button(settings, play_button, mouse_x, mouse_y)
+            if settings.drawing_mode:
+                grid.mouse_press = pygame.mouse.get_pressed()[0]
+                grid.mouse_x = mouse_x
+                grid.mouse_y = mouse_y
         elif event.type == pygame.MOUSEBUTTONUP:
             grid.mouse_press = pygame.mouse.get_pressed()[0]
 
