@@ -18,6 +18,7 @@ class Player():
         self.bottom = self.start_pos_bottom
         self.direction_vector = np.array([0, 1])
         self.steering_vector = np.array([0, 0])
+        self.rect = pygame.Rect(self.center - self.radius, self.bottom - self.radius, 2*self.radius, 2*self.radius)
         # movement boundaries #
         self.bound_left = settings.grid_block_size + self.radius
         self.bound_up = settings.grid_block_size + self.radius
@@ -29,14 +30,16 @@ class Player():
         if self.moving:
             self.direction_vector = self.direction_vector + self.steering_vector
             self.normalize_direction_vector()
-            self.center -= self.direction_vector[0]
-            self.bottom -= self.direction_vector[1]
+            self.center -= self.direction_vector[0] * self.speed
+            self.bottom -= self.direction_vector[1] * self.speed
             if self.bottom <= self.bound_up or self.bottom >= self.bound_bottom:
                 self.moving = False
                 self.reset_to_initial_pos()
             if self.center >= self.bound_right or self.center <= self.bound_left:
                 self.moving = False
                 self.reset_to_initial_pos()
+            self.rect.x = self.center - self.radius
+            self.rect.y = self.bottom - self.radius
 
     def reset_to_initial_pos(self):
         self.center = self.start_pos_center
@@ -51,8 +54,11 @@ class Player():
             return np.array([self.direction_vector[1], -self.direction_vector[0]])
 
     def normalize_direction_vector(self):
-        self.direction_vector = self.direction_vector / np.linalg.norm(self.direction_vector)
+        norm = np.linalg.norm(self.direction_vector)
+        self.direction_vector[0] = round(self.direction_vector[0] / norm)
+        self.direction_vector[1] = round(self.direction_vector[1] / norm)
 
     def blitme(self):
         """ draw player """
         pygame.draw.circle(self.screen, self.color, (int(self.center), int(self.bottom)), self.radius)
+        #pygame.draw.rect(self.screen, self.color, self.rect)

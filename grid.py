@@ -21,8 +21,8 @@ class Grid():
     def update(self):
         if self.mouse_press:
             self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
-            if self.mouse_x >= self.settings.grid_left and self.mouse_x <= self.settings.grid_right:
-                if self.mouse_y >= self.settings.grid_up and self.mouse_y <= self.settings.grid_bottom:
+            if self.mouse_x > self.settings.grid_left and self.mouse_x < self.settings.grid_right:
+                if self.mouse_y > self.settings.grid_up and self.mouse_y < self.settings.grid_bottom:
                     posx_true, posy_true = self.get_correct_block_position(self.mouse_x, self.mouse_y)
                     block = Block(self.settings, self.screen, posx_true, posy_true)
                     self.body.add(block)

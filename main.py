@@ -21,9 +21,9 @@ def run_game():
     blocks = Group()
     grid = Grid(settings, screen, blocks, stats)
     pygame.display.set_caption('run or die')
-
     while True:
         gf.check_event(settings, screen, player, drawing_button, play_button, stats, blocks, grid)
+        gf.check_wall_collisions(player, grid)
         player.update()
         grid.update()
         gf.update_screen(settings, screen, player, drawing_button, play_button, blocks, grid)

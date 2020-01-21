@@ -10,6 +10,7 @@ class Block(Sprite):
         self.centerx = posx
         self.centery = posy
         self.width = settings.grid_block_size
+        self.rect = pygame.Rect(self.centerx, self.centery, self.width, self.width)
 
     def draw_block(self):
         """ draw a rect block """

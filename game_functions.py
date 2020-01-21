@@ -80,29 +80,14 @@ def check_event(settings, screen, player, drawing_button, play_button, stats, bl
             grid.mouse_press = pygame.mouse.get_pressed()[0]
             grid.mouse_x = mouse_x
             grid.mouse_y = mouse_y
-            #stats.drawing_mode = pygame.mouse.get_pressed()
-            #if stats.drawing_mode[0]:
-            #    create_grid_block(settings, screen, mouse_x, mouse_y, blocks)
         elif event.type == pygame.MOUSEBUTTONUP:
-            #stats.drawing_mode = pygame.mouse.get_pressed()
             grid.mouse_press = pygame.mouse.get_pressed()[0]
 
 
-
-def get_correct_block_position(settings, posx, posy):
-    """ calc a correct coords to fill a grid block """
-    posx_true = ((posx - settings.grid_block_size) // settings.grid_block_size + 1) * settings.grid_block_size
-    posy_true = ((posy - settings.grid_block_size) // settings.grid_block_size + 1) * settings.grid_block_size
-    return posx_true, posy_true
-
-
-def create_grid_block(settings, screen, posx, posy, blocks):
-    """ create a wall block """
-    if posx >= settings.grid_left and posx <= settings.grid_right:
-        if posy >= settings.grid_up and posy <= settings.grid_bottom:
-            posx_true, posy_true = get_correct_block_position(settings, posx, posy)
-            block = Block(settings, screen, posx_true, posy_true)
-            blocks.add(block)
+def check_wall_collisions(player, grid):
+    collisions = pygame.sprite.spritecollideany(player, grid.body)
+    if collisions:
+        player.reset_to_initial_pos()
 
 
 def update_screen(settings, screen, player, drawing_button, play_button, blocks, grid):
@@ -112,12 +97,10 @@ def update_screen(settings, screen, player, drawing_button, play_button, blocks,
     screen.fill(settings.background_color)
     draw_grid(settings, screen)
     drawing_button.draw_button()
-    #for block in blocks:
-    #    block.draw_block()
     grid.draw_all_blocks()
     play_button.draw_button()
     player.blitme()
-    pygame.display.flip()
+    pygame.display.update()
 
 
 if __name__ == '__main__':

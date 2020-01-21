@@ -15,4 +15,3 @@
             self.moving = False
     self.rect.bottom = self.bottom
 '''
-
