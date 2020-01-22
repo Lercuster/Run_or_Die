@@ -12,9 +12,9 @@ class Player():
         #self.settings = settings
         self.color = settings.player_color
         self.radius = settings.player_radius
-        self.start_pos_center = settings.game_field_width // 2
+        self.start_pos_center = 10000
         self.center = self.start_pos_center
-        self.start_pos_bottom = settings.screen_height - 3.5 * settings.player_radius
+        self.start_pos_bottom = 10000
         self.bottom = self.start_pos_bottom
         self.direction_vector = np.array([0, 1])
         self.steering_vector = np.array([0, 0])
@@ -61,4 +61,3 @@ class Player():
     def blitme(self):
         """ draw player """
         pygame.draw.circle(self.screen, self.color, (int(self.center), int(self.bottom)), self.radius)
-        #pygame.draw.rect(self.screen, self.color, self.rect)

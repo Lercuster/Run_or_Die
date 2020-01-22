@@ -27,7 +27,7 @@ class Settings():
 
         # status
         self.drawing_mode = False
-        self.playing_mode = False
+        self.placing_mode = False
 
 
     def initialize_dynamic_settings(self):

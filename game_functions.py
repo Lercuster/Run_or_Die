@@ -1,10 +1,5 @@
 import pygame
 import sys
-from global_settings import Settings
-from time import sleep
-from random import randint
-from block import Block
-from grid import Grid
 
 
 def draw_grid(settings, screen):
@@ -60,17 +55,23 @@ def check_drawing_button(settings, drawing_button, mouse_x, mouse_y):
             drawing_button.change_color()
 
 
-def check_play_button(settings, play_button, mouse_x, mouse_y):
+def check_place_button(settings, place_button, mouse_x, mouse_y, player):
     """ check is play button is clicked """
-    butt_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    butt_clicked = place_button.rect.collidepoint(mouse_x, mouse_y)
+    coords_in_grid = player.bound_right > mouse_x > player.bound_left and \
+                        player.bound_bottom > mouse_y > player.bound_up
+    print(coords_in_grid)
     if butt_clicked:
-        if not settings.playing_mode:
-            settings.playing_mode = True
-            play_button.change_color()
+        if not settings.placing_mode:
+            settings.placing_mode = True
+            place_button.change_color()
         else:
-            settings.playing_mode = False
-            play_button.change_color()
-
+            settings.placing_mode = False
+            place_button.change_color()
+    else:
+        if settings.placing_mode and coords_in_grid:
+            settings.placing_mode = False
+            place_button.change_color()
 
 def check_clear_button(settings, clear_button, mouse_x, mouse_y, grid):
     """ check is clear button is clicked """
@@ -79,7 +80,7 @@ def check_clear_button(settings, clear_button, mouse_x, mouse_y, grid):
         grid.clear()
 
 
-def check_event(settings, screen, player, drawing_button, play_button, clear_button, stats, grid):
+def check_event(settings, screen, player, drawing_button, place_button, clear_button, stats, grid):
     """
     Function which is calling check keydown/keyup.
     Checks events in general and deal with them.
@@ -94,7 +95,7 @@ def check_event(settings, screen, player, drawing_button, play_button, clear_but
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_drawing_button(settings, drawing_button, mouse_x, mouse_y)
-            check_play_button(settings, play_button, mouse_x, mouse_y)
+            check_place_button(settings, place_button, mouse_x, mouse_y, player)
             check_clear_button(settings, clear_button, mouse_x, mouse_y, grid)
             if settings.drawing_mode:
                 grid.mouse_press = pygame.mouse.get_pressed()[0]
@@ -121,5 +122,9 @@ def update_screen(settings, screen, player, drawing_button, play_button, clear_b
     grid.draw_all_blocks()
     play_button.draw_button()
     clear_button.draw_button()
+    if settings.placing_mode:
+        player.start_pos_center = pygame.mouse.get_pos()[0]
+        player.start_pos_bottom = pygame.mouse.get_pos()[1]
+        player.reset_to_initial_pos()
     player.blitme()
     pygame.display.update()
