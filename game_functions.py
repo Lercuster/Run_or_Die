@@ -43,7 +43,7 @@ def check_keyup_event(event, player):
         player.moving = False
 
 
-def check_drawing_button(settings, drawing_button, mouse_x, mouse_y):
+def check_drawing_button(settings, drawing_button, mouse_x, mouse_y, grid):
     """ check is drawing button is clicked """
     butt_clicked = drawing_button.rect.collidepoint(mouse_x, mouse_y)
     if butt_clicked:
@@ -53,6 +53,10 @@ def check_drawing_button(settings, drawing_button, mouse_x, mouse_y):
         else:
             settings.drawing_mode = False
             drawing_button.change_color()
+    if settings.drawing_mode:
+        grid.mouse_press = pygame.mouse.get_pressed()[0]
+        grid.mouse_x = mouse_x
+        grid.mouse_y = mouse_y
 
 
 def check_place_button(settings, place_button, mouse_x, mouse_y, player):
@@ -94,13 +98,9 @@ def check_event(settings, screen, player, drawing_button, place_button, clear_bu
             check_keyup_event(event, player)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_drawing_button(settings, drawing_button, mouse_x, mouse_y)
+            check_drawing_button(settings, drawing_button, mouse_x, mouse_y, grid)
             check_place_button(settings, place_button, mouse_x, mouse_y, player)
             check_clear_button(settings, clear_button, mouse_x, mouse_y, grid)
-            if settings.drawing_mode:
-                grid.mouse_press = pygame.mouse.get_pressed()[0]
-                grid.mouse_x = mouse_x
-                grid.mouse_y = mouse_y
         elif event.type == pygame.MOUSEBUTTONUP:
             grid.mouse_press = pygame.mouse.get_pressed()[0]
 
