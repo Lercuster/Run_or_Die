@@ -8,6 +8,7 @@ from grid import Grid
 
 
 def draw_grid(settings, screen):
+    """ drawing grid """
     block_size = settings.grid_block_size
     rows = settings.game_field_width // block_size
     x = block_size
@@ -54,11 +55,9 @@ def check_drawing_button(settings, drawing_button, mouse_x, mouse_y):
         if not settings.drawing_mode:
             settings.drawing_mode = True
             drawing_button.change_color()
-            print("drawing button is clicked")
         else:
             settings.drawing_mode = False
             drawing_button.change_color()
-            print("drawing button is unclicked")
 
 
 def check_play_button(settings, play_button, mouse_x, mouse_y):
@@ -68,14 +67,19 @@ def check_play_button(settings, play_button, mouse_x, mouse_y):
         if not settings.playing_mode:
             settings.playing_mode = True
             play_button.change_color()
-            print("playing button is clicked")
         else:
             settings.playing_mode = False
             play_button.change_color()
-            print("playing button is unclicked")
 
 
-def check_event(settings, screen, player, drawing_button, play_button, stats, blocks, grid):
+def check_clear_button(settings, clear_button, mouse_x, mouse_y, grid):
+    """ check is clear button is clicked """
+    butt_clicked = clear_button.rect.collidepoint(mouse_x, mouse_y)
+    if butt_clicked:
+        grid.clear()
+
+
+def check_event(settings, screen, player, drawing_button, play_button, clear_button, stats, grid):
     """
     Function which is calling check keydown/keyup.
     Checks events in general and deal with them.
@@ -91,6 +95,7 @@ def check_event(settings, screen, player, drawing_button, play_button, stats, bl
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_drawing_button(settings, drawing_button, mouse_x, mouse_y)
             check_play_button(settings, play_button, mouse_x, mouse_y)
+            check_clear_button(settings, clear_button, mouse_x, mouse_y, grid)
             if settings.drawing_mode:
                 grid.mouse_press = pygame.mouse.get_pressed()[0]
                 grid.mouse_x = mouse_x
@@ -100,12 +105,13 @@ def check_event(settings, screen, player, drawing_button, play_button, stats, bl
 
 
 def check_wall_collisions(player, grid):
+    """ check collisions between player and wall blocks """
     collisions = pygame.sprite.spritecollideany(player, grid.body)
     if collisions:
         player.reset_to_initial_pos()
 
 
-def update_screen(settings, screen, player, drawing_button, play_button, blocks, grid):
+def update_screen(settings, screen, player, drawing_button, play_button, clear_button, grid):
     """
     Updating screen.
     """
@@ -114,9 +120,6 @@ def update_screen(settings, screen, player, drawing_button, play_button, blocks,
     drawing_button.draw_button()
     grid.draw_all_blocks()
     play_button.draw_button()
+    clear_button.draw_button()
     player.blitme()
     pygame.display.update()
-
-
-if __name__ == '__main__':
-    print('kvsugvd')
