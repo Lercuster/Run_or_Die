@@ -25,10 +25,10 @@ def check_keydown_event(event, player):
     """
     if event.key == pygame.K_RIGHT:
         if player.moving:
-            player.steering_vector = player.get_orto_vector('r')
+            player.turning_right = True
     if event.key == pygame.K_LEFT:
         if player.moving:
-            player.steering_vector = player.get_orto_vector('l')
+            player.turning_left = True
     if event.key == pygame.K_UP:
         player.moving = True
     elif event.key == pygame.K_q:
@@ -41,6 +41,10 @@ def check_keyup_event(event, player):
     """
     if event.key == pygame.K_UP:
         player.moving = False
+    if event.key == pygame.K_LEFT:
+        player.turning_left = False
+    if event.key == pygame.K_RIGHT:
+        player.turning_right = False
 
 
 def check_drawing_button(settings, drawing_button, mouse_x, mouse_y, grid):
@@ -64,7 +68,6 @@ def check_place_button(settings, place_button, mouse_x, mouse_y, player):
     butt_clicked = place_button.rect.collidepoint(mouse_x, mouse_y)
     coords_in_grid = player.bound_right > mouse_x > player.bound_left and \
                         player.bound_bottom > mouse_y > player.bound_up
-    print(coords_in_grid)
     if butt_clicked:
         if not settings.placing_mode:
             settings.placing_mode = True

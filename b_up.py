@@ -1,3 +1,4 @@
+import numpy as np
 '''def update(self):
     """ move player """
     if self.move_right:
@@ -15,3 +16,8 @@
             self.moving = False
     self.rect.bottom = self.bottom
 '''
+
+a = np.array([1, 0])
+b = np.array([-1, 1])
+
+print(np.linalg.norm(b))

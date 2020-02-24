@@ -8,7 +8,10 @@ class Player():
     def __init__(self, settings, screen):
         self.screen = screen
         self.speed = settings.player_speed
+        self.steering_sensitivity = settings.player_steering_sensitivity
         self.moving = False
+        self.turning_right = False
+        self.turning_left = False
         #self.settings = settings
         self.color = settings.player_color
         self.radius = settings.player_radius
@@ -28,8 +31,14 @@ class Player():
     def update(self):
         """ move player """
         if self.moving:
-            self.direction_vector = self.direction_vector + self.steering_vector
-            self.normalize_direction_vector()
+            if self.turning_right:
+                self.steering_vector = self.get_orto_vector('r')
+                self.direction_vector = self.direction_vector + self.steering_vector * self.steering_sensitivity
+                self.normalize_direction_vector()
+            if self.turning_left:
+                self.steering_vector = self.get_orto_vector('l')
+                self.direction_vector = self.direction_vector + self.steering_vector * self.steering_sensitivity
+                self.normalize_direction_vector()
             self.center -= self.direction_vector[0] * self.speed
             self.bottom -= self.direction_vector[1] * self.speed
             if self.bottom <= self.bound_up or self.bottom >= self.bound_bottom:
@@ -40,6 +49,7 @@ class Player():
                 self.reset_to_initial_pos()
             self.rect.x = self.center - self.radius
             self.rect.y = self.bottom - self.radius
+
 
     def reset_to_initial_pos(self):
         self.center = self.start_pos_center
@@ -55,9 +65,12 @@ class Player():
 
     def normalize_direction_vector(self):
         norm = np.linalg.norm(self.direction_vector)
-        self.direction_vector[0] = round(self.direction_vector[0] / norm)
-        self.direction_vector[1] = round(self.direction_vector[1] / norm)
+        self.direction_vector = self.direction_vector / norm
 
     def blitme(self):
         """ draw player """
         pygame.draw.circle(self.screen, self.color, (int(self.center), int(self.bottom)), self.radius)
+        pygame.draw.line(self.screen, self.color, (self.center, self.bottom),
+                         (self.center - self.direction_vector[0] * 20,
+                          self.bottom - self.direction_vector[1] * 20),
+                         5)
