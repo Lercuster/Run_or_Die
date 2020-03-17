@@ -26,7 +26,7 @@ def run_game():
         player.update()
         grid.update()
         gf.update_screen(settings, screen, player, drawing_button, place_button, clear_button, grid)
-        clock.tick(120)
+        clock.tick(30)
 
 
 
